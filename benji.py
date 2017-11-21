@@ -102,7 +102,7 @@ class MyFrame(wx.Frame):
                 except:
                     print('Nope, this is not working.')
         #Wikipedia
-            elif put.startswith('wiki '):
+            elif put.startswith('wiki ') or put.startswith('who is ') or put.startswiht('what is ') :
                 try:
                     link='+'.join(link[1:])
                     say=link.replace('+',' ')
