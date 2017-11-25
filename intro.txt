@@ -1,0 +1,6 @@
+This is used for voice search
+This code contains:
+Option for playing youtube video(Play + )
+Option to search wiki (Wiki + )
+Option to search BBC
+Option to search google (search + )
