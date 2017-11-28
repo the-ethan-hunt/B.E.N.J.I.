@@ -1,10 +1,10 @@
 # coding: utf-8
-import wx
+import wx       #pip install wxpython
 import os
 import wikipedia
 import time 
 import webbrowser 
-import winshell
+import winshell #pip install pypiwin32
 import json
 import requests
 import ctypes 
