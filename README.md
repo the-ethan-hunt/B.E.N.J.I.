@@ -34,6 +34,7 @@ NOTE: B.E.N.J.I. has been selected as a project for the [Kharagpur Winter of Cod
 You can install B.E.N.J.I. on your laptop by cloning this repository as of first:
 1. `git clone http://github.com/the-ethan-hunt/B.E.N.J.I`
 2. Open your `IPython notebook` to `%run benji.py`. For `Command Prompt` try `python benji.py`. <br><br>
+3. Make sure that you have folllowing libraries installed via pip(pip install [library name] )<br> wx(for GUI) <br>wikipedia<br> winshell<br>speech_recognition<br><br>
 P.S. We are trying to make B.E.N.J.I. work for Linux and MacOS too. Currently it operates only on Windows. 
 
 ### Contributing
