@@ -47,7 +47,7 @@ class MyFrame(wx.Frame):
      
         def OnEnter(self,event):
             put=self.txt.GetValue()
-            put=put.lower()
+            #put=put.lower()
             link=put.split()
             if put=='':
                 m=sr.Recognizer()
@@ -188,6 +188,7 @@ class MyFrame(wx.Frame):
                         print(item+'\n')
                 except:
                     print("Error")
+                os.close()
 
     #Trigger the GUI. Light the fuse!
 if __name__=="__main__":
