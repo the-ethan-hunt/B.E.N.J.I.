@@ -9,6 +9,7 @@ import json
 import requests
 import ctypes 
 import random
+import urllib
 import ssl
 from bs4 import BeautifulSoup
 import win32com.client as wicl
@@ -26,6 +27,7 @@ else:
 headers = {'''user-agent':'Chrome/53.0.2785.143'''}
 speak=wicl.Dispatch("SAPI.SpVoice")
 # Creating the graphical user interface
+i=0
 class MyFrame(wx.Frame):
         def __init__(self):
             wx.Frame.__init__(self,None,pos=wx.DefaultPosition, size=wx.Size(400,100),style=wx.MINIMIZE_BOX| wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX | wx.CLIP_CHILDREN, title="BENJI")
@@ -52,6 +54,7 @@ class MyFrame(wx.Frame):
                 with sr.Microphone() as srm:
                     audio=m.listen(srm)
                 try:
+                    self.txt.SetValue("Listening...")
                     put=m.recognize_google(audio)
                     put=put.lower()
                     link=put.split()
@@ -61,20 +64,21 @@ class MyFrame(wx.Frame):
                 except sr.RequestError as RE:
                     print("could not request results from IMF archives;{0}".format(RE))
                 except:
-                    print("Unknown error occurred!")
+                    print("Unknown error occurred, while taking speech input!")
          
          #Play song on  Youtube
             if put.startswith('play '):
                 try:
                     link = '+'.join(link[1:])
+#                    print(link)
                     say = link.replace('+', ' ')
                     url = 'https://www.youtube.com/results?search_query='+link
-                    source_code = requests.get(url, headers=headers, timeout=15)
-                    plaincode = source_code.text
-                    soup = BeautifulSoup(plaincode, "html.parser")
+#                    webbrowser.open('https://www.youtube.com'+link)
+                    fhand=urllib.request.urlopen(url).read()
+                    soup = BeautifulSoup(fhand, "html.parser")
                     songs = soup.findAll('div', {'class': 'yt-lockup-video'})
-                    song = songs[0].contents[0].contents[0].contents[0]
-                    hit = song['href']
+                    hit = songs[0].find('a')['href']
+#                    print(hit)
                     speak.Speak("playing "+say)
                     webbrowser.open('https://www.youtube.com'+hit)
                 except:
@@ -116,7 +120,7 @@ class MyFrame(wx.Frame):
                         speak.Speak("locking the device")
                         ctypes.windll.user32.LockWorkStation()
                 except :
-                print('Cannot lock device')  
+                        print('Cannot lock device')  
 
         #News of various press agencies
             elif put.startswith('aljazeera '):
@@ -171,6 +175,19 @@ class MyFrame(wx.Frame):
                         i+=1
                 except:
                     print('R&A W is blocking our reports, Ethan. Sorry! ')
+            # Finding files in pc
+            elif put.startswith('lookfor '):
+                try:
+                    name=link[1]
+                    path=link[2]
+                    result=[]
+                    for root, dirs, files in os.walk(path):
+                        if name in files:
+                            result.append(os.path.join(root, name))
+                    for item in result:
+                        print(item+'\n')
+                except:
+                    print("Error")
 
     #Trigger the GUI. Light the fuse!
 if __name__=="__main__":
