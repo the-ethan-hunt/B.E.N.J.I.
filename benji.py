@@ -1,5 +1,6 @@
 # coding: utf-8
 import wx
+import re
 import os
 import wikipedia
 import time 
@@ -45,8 +46,18 @@ class MyFrame(wx.Frame):
      
         def OnEnter(self,event):
             put=self.txt.GetValue()
+            self.txt.SetValue("")
             put=put.lower()
+            put=put.strip()
+            put = re.sub(r'[?|$|.|!]',r'',put)
             link=put.split()
+
+            identity_keywords = ["who are you", "who r u", "what is your name"]
+            youtube_keywords = ["play", "stream", "queue"]
+            launch_keywords = ["open", "launch"]
+            search_keywords = ["search", "google"]
+            wikipedia_keywords = ["wikipedia", "wiki"]
+
             if put=='':
                 m=sr.Recognizer()
                 with sr.Microphone() as srm:
@@ -64,36 +75,28 @@ class MyFrame(wx.Frame):
                     print("Unknown error occurred!")
          
          #Play song on  Youtube
-            if put.startswith('play '):
+            elif any(word in put for word in youtube_keywords):
                 try:
                     link = '+'.join(link[1:])
-                    say = link.replace('+', ' ')
                     url = 'https://www.youtube.com/results?search_query='+link
-                    source_code = requests.get(url, headers=headers, timeout=15)
-                    plaincode = source_code.text
-                    soup = BeautifulSoup(plaincode, "html.parser")
-                    songs = soup.findAll('div', {'class': 'yt-lockup-video'})
-                    song = songs[0].contents[0].contents[0].contents[0]
-                    hit = song['href']
-                    speak.Speak("playing "+say)
-                    webbrowser.open('https://www.youtube.com'+hit)
+                    webbrowser.open(url)
                 except:
                     print('Sorry Ethan. Looks like its not working!')
         #Who are you?
-            elif put.startswith('who are you '):
+            elif any(word in put for word in identity_keywords):
                 try: 
                     speak.Speak("I am BENJI, a digital assistant declassified for civilian use. Previously I was used by the Impossible Missions Force")
                 except:
                     print('Error. Try reading the ReadMe to know about me!')
         #Open a webpage
-            elif put.startswith('open '):
+            elif any(word in put for word in launch_keywords):
                 try:
                     speak.Speak("opening "+link[1])
                     webbrowser.open('http://www.'+link[1]+'.com')
                 except:
                     print('Sorry Ethan,unable to access it. Cannot hack either-IMF protocol!')
         #Google search
-            elif put.startswith('search '):
+            elif any(word in put for word in search_keywords):
                 try:
                     link='+'.join(link[1:])
                     say=link.replace('+',' ')
@@ -102,12 +105,13 @@ class MyFrame(wx.Frame):
                 except:
                     print('Nope, this is not working.')
         #Wikipedia
-            elif put.startswith('wiki '):
+            elif any(word in put for word in wikipedia_keywords):
                 try:
                     link='+'.join(link[1:])
                     say=link.replace('+',' ')
-                    speak.Speak("Wikipedia search for"+say)
-                    webbrowser.open('https://en.wikipedia.org/wiki/'+link)
+                    wikisearch = wikipedia.page(say)
+                    speak.Speak("Opening wikipedia page for"+say)
+                    webbrowser.open(wikisearch.url)
                 except:
                 	print('Wikipedia could not either find the article or your Third-world connection is unstable')
        #Lock the device 
@@ -116,59 +120,63 @@ class MyFrame(wx.Frame):
                         speak.Speak("locking the device")
                         ctypes.windll.user32.LockWorkStation()
                 except :
-                print('Cannot lock device')  
+                    print('Cannot lock device')
 
         #News of various press agencies
-            elif put.startswith('aljazeera '):
+            elif put.startswith('aljazeera'):
                 try:
-                    jsonObj=urlopen('''  https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3''')
-                    data=json.load(jsonObj)
-                    i+=1
-                    speak.Speak('''Our agents from Al-Jazeera report this''')
-                    print('''  =====Al Jazeera====='''+'\n')
-                    for item in data['articles']:
-                        print(str(i)+'. '+item['title']+'\n')
-                        print(item['description']+'\n')
-                        i+=1
+                    aljazeeraurl = ('https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
+                    newsresponce = requests.get(aljazeeraurl)
+                    newsjson = newsresponce.json()
+                    speak.Speak('Our agents from Al-Jazeera report this')
+                    print('  =====Al Jazeera===== \n')
+                    i = 1
+                    for item in newsjson['articles']:
+                        print(str(i) + '. ' + item['title'] + '\n')
+                        print(item['description'] + '\n')
+                        i += 1
                 except:
                     print('Qatari agents have refused to share this intel, Ethan')
-            elif put.startswith('bbc '):
+            elif put.startswith('bbc'):
                 try:
-                    jsonObj=urlopen('''https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=571863193daf421082a8666fe4b666f3''')
-                    data=json.load(jsonObj)
-                    i+=1
-                    speak.Speak('''Our agents from BBC report this''')
-                    print('''  =====BBC====='''+'\n')
-                    for item in data['articles']:
-                        print(str(i)+'. '+item['title']+'\n')
-                        print(item['description']+'\n')
-                        i+=1
+                    bbcurl = ('https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=571863193daf421082a8666fe4b666f3')
+                    newsresponce = requests.get(bbcurl)
+                    newsjson = newsresponce.json()
+                    speak.Speak('Our agents from BBC report this')
+                    print('  =====BBC===== \n')
+                    i = 1
+                    for item in newsjson['articles']:
+                        print(str(i) + '. ' + item['title'] + '\n')
+                        print(item['description'] + '\n')
+                        i += 1
                 except:
                     print('MI6 is going crazy! Not allowing this!')
-            elif put.startswith('cricket '):
+            elif put.startswith('cricket'):
                 try:
-                    jsonObj=urlopen(''' https://newsapi.org/v1/articles?source=espn-cric-info&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3''')
-                    data=json.load(jsonObj)
-                    i+=1
-                    speak.Speak('''Cricket news are''')
-                    print('''  =====ESPN====='''+'\n')
-                    for item in data['articles']:
-                        print(str(i)+'. '+item['title']+'\n')
-                        print(item['description']+'\n')
-                        i+=1
+                    cricketurl = ('https://newsapi.org/v1/articles?source=espn-cric-info&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
+                    newsresponce = requests.get(cricketurl)
+                    newsjson = newsresponce.json()
+                    speak.Speak('Our agents from ESPN Cricket report this')
+                    print('  =====CRICKET NEWS===== \n')
+                    i = 1
+                    for item in newsjson['articles']:
+                        print(str(i) + '. ' + item['title'] + '\n')
+                        print(item['description'] + '\n')
+                        i += 1
                 except:
                     print('Connection not secure')
-            elif put.startswith('news '):
+            elif put.startswith('hindus'):
                 try:
-                    jsonObj=urlopen('''https://newsapi.org/v1/articles?source=the-hindu&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3''')
-                    data=json.load(jsonObj)
-                    i+=1
-                    speak.Speak('''Some news from The Hindu''')
-                    print('''  =====The Hindu====='''+'\n')
-                    for item in data['articles']:
-                        print(str(i)+'. '+item['title']+'\n')
-                        print(item['description']+'\n')
-                        i+=1
+                    hindusurl = ('https://newsapi.org/v1/articles?source=the-hindu&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
+                    newsresponce = requests.get(hindusurl)
+                    newsjson = newsresponce.json()
+                    speak.Speak('Our agents from Hindu News report this')
+                    print('  =====HINDU NEWS===== \n')
+                    i = 1
+                    for item in newsjson['articles']:
+                        print(str(i) + '. ' + item['title'] + '\n')
+                        print(item['description'] + '\n')
+                        i += 1
                 except:
                     print('R&A W is blocking our reports, Ethan. Sorry! ')
 
