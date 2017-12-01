@@ -191,6 +191,19 @@ class MyFrame(wx.Frame):
                         i += 1
                 except:
                     print('R&A W is blocking our reports, Ethan. Sorry! ')
+            # Finding files in pc
+            elif put.startswith('lookfor '):
+                try:
+                    name=link[1]
+                    path=link[2]
+                    result=[]
+                    for root, dirs, files in os.walk(path):
+                        if name in files:
+                            result.append(os.path.join(root, name))
+                    for item in result:
+                        print(item+'\n')
+                except:
+                    print("Error")
 
     #Trigger the GUI. Light the fuse!
 if __name__=="__main__":
