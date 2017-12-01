@@ -9,6 +9,7 @@ import json
 import requests
 import ctypes 
 import random
+import regex
 import urllib
 import ssl
 from bs4 import BeautifulSoup
@@ -47,7 +48,8 @@ class MyFrame(wx.Frame):
      
         def OnEnter(self,event):
             put=self.txt.GetValue()
-            #put=put.lower()
+            put1=put
+            put=put.lower()
             link=put.split()
             if put=='':
                 m=sr.Recognizer()
@@ -176,19 +178,20 @@ class MyFrame(wx.Frame):
                 except:
                     print('R&A W is blocking our reports, Ethan. Sorry! ')
             # Finding files in pc
-            elif put.startswith('lookfor '):
+            elif put1.startswith('lookfor '):
                 try:
-                    name=link[1]
-                    path=link[2]
-                    result=[]
-                    for root, dirs, files in os.walk(path):
-                        if name in files:
-                            result.append(os.path.join(root, name))
-                    for item in result:
-                        print(item+'\n')
+                    link1=put1.split()
+                    name=link1[1]
+                    rex=regex.compile(name)
+                    filepath=link1[2]
+                    for root,dirs,files in os.walk(os.path.normpath(filepath)):
+                        for f in files:
+                            result = rex.search(f)
+                            if result:
+                                print (os.path.join(root, f))
+                    
                 except:
                     print("Error")
-                os.close()
 
     #Trigger the GUI. Light the fuse!
 if __name__=="__main__":
