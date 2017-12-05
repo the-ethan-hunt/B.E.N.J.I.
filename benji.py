@@ -150,6 +150,33 @@ def events(put,link):
 				i += 1
 		except:
 			print('R&A W is blocking our reports, Ethan. Sorry! ')
+			
+			
+				#IMDB search
+	elif any(word in put for word in search_keywords):
+		try:
+			link='+'.join(link[1:])
+			say=link.replace('+',' ')
+			speak.Speak("searching google for "+say)
+			webbrowser.open('https://www.imdb.com/?ref_=nv_home'+link)
+		except:
+			print('Nope, this is not working.')
+		#IMDB
+	elif any(word in put for word in wikipedia_keywords):
+		try:
+			link = '+'.join(link[1:])
+			say = link.replace('+', ' ')
+			wikisearch = wikipedia.page(say)
+			speak.Speak("Opening imdb page for" + say)
+			webbrowser.open(imdbsearch.url)
+		except:
+			print('Find movie and ratings')
+			
+			
+			
+			
+			
+			
 
 class MyFrame(wx.Frame):
 		def __init__(self):
