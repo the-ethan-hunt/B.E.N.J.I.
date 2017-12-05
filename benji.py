@@ -30,12 +30,42 @@ speak=wicl.Dispatch("SAPI.SpVoice")
 # Creating the graphical user interface
 i=0
 
-def events(put,link):
+def events(put):
 	identity_keywords = ["who are you", "who r u", "what is your name"]
 	youtube_keywords = ["play", "stream", "queue"]
 	launch_keywords = ["open", "launch"]
 	search_keywords = ["search", "google"]
 	wikipedia_keywords = ["wikipedia", "wiki"]
+	check_keywords = ["what","when","was","how","has","had","should","would","can","could","cool","good"] #could or cool or good
+
+	link = put.split()
+
+	#Add note
+	if put.startswith("note") or put.startswith("not") or put.startswith("node"):	
+		try:
+			check = link[1]
+			username = os.getlogin()
+			filename = "Notes.txt"
+			f1 = open(r'''C:\Users\{0}\Desktop\{1}'''.format(username,filename),'a')
+			link = '+'.join(link[1:])
+			text = link.replace('+',' ')
+			text = text[0].capitalize() + text[1:]
+			if check in check_keywords:
+				text += "?"
+			else:
+				text += "."	
+			f1.write(text)
+			f1.write("\n")
+			f1.close()
+			speak.Speak("Note added successfully!")
+		except:
+			print("Could not add the specified note!")
+
+	put = put.lower()
+	put = put.strip()
+	link = put.split()
+
+	#Play Youtube
 	if any(word in put for word in youtube_keywords):
 		try:
 			link = '+'.join(link[1:])
@@ -94,7 +124,7 @@ def events(put,link):
 			print('Cannot lock device')  
 
 		#News of various press agencies
-	elif put.startswith('aljazeera '):
+	elif put.startswith('al jazeera '): 
 		try:
 			aljazeeraurl = ('https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
 			newsresponce = requests.get(aljazeeraurl)
@@ -179,19 +209,13 @@ class MyFrame(wx.Frame):
 		def OnEnter(self,event):
 			put=self.txt.GetValue()
 			self.txt.SetValue("")
-			put=put.lower()
-			put = put.strip()
 			put = re.sub(r'[?|$|.|!]', r'', put)
-			link=put.split()
-			events(put,link)
+			events(put)
 			
 			if put=='':
 			   print('Reenter')
-		 
-		 #Play song on  Youtube
 
 		def OnClicked(self,event):
-#            time.sleep(4)
 			r = sr.Recognizer()                                                                                   
 			with sr.Microphone() as source:                                                                                                                                                        
 				speak.Speak('Hey I am Listening ')
@@ -199,11 +223,8 @@ class MyFrame(wx.Frame):
 			try:
 				put=r.recognize_google(audio)
 				self.txt.SetValue(put)
-				put=put.lower()
-				put = put.strip()
 				#put = re.sub(r'[?|$|.|!]', r'', put)
-				link=put.split()
-				events(put,link)
+				events(put)
 				
 			except sr.UnknownValueError:
 				print("Could not understand audio")
