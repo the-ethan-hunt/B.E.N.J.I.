@@ -36,14 +36,42 @@ NOTE: B.E.N.J.I. has been selected as a project for the [Kharagpur Winter of Cod
 &nbsp;&nbsp;&nbsp; "On properly documented analysis and Congressional finding, the Impossible Missions Force(IMF) therefore, declassifies it's junior level digital assistant titled B.E.N.J.I.,short for Brilliant and Efficient non-Javascript enabled Intelligence Systems for civilian use. It might be noted that, this is only for peaceful purposes and the IMF does not hold any responsibility on its misuse. The Force however,has full right to control the activities of the system both,legally and illegally. The Force also submits that any covert action taken due to the system is not questionable to any Congressional hearing. Finally the Force asserts that none of its agents,operatives or analysts neither accept nor deny details of any operation regarding B.E.N.J.I. to any hearing without the Secretary's approval."
 </p>
 
+
 ### Installation
 
 [(Back to top)](#list-of-contents)
 
 You can install B.E.N.J.I. on your laptop by cloning this repository as of first:
 1. `git clone http://github.com/the-ethan-hunt/B.E.N.J.I`
-2. Open your `IPython notebook` to `%run benji.py`. For `Command Prompt` try `python benji.py`. <br><br>
+2. Open your `IPython notebook` to `%run benji.py`. For `Command Prompt` try `python3 benji.py`. <br><br>
 P.S. We are trying to make B.E.N.J.I. work for MacOS too. B.E.N.J.I. is currently working for `Linux` and `Windows` :tada:
+
+### Prerequisite
+python3
+```
+sudo apt install python3
+```
+espeak
+```
+sudo apt install espeak
+```
+pyttsx3
+```
+sudo pip3 install pyttsx3
+```
+wxpython extras
+```
+pip3 install -U     -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04     wxPython
+```
+prerequisite for pyaudio to work
+```
+sudo apt install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 ffmpeg libav-tools
+```
+all other requirements can be installed by
+```
+cd linux
+sudo pip3 install -r requirements-linux.txt
+```
 
 ### B.E.N.J.I working in Linux
 ![Working in Linux](working-benjion-linux.gif) 
