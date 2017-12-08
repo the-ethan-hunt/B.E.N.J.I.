@@ -16,6 +16,8 @@ from urllib.request import urlopen
 import speech_recognition as sr
 import requests
 import pyttsx3
+import geopy
+from geopy.geocoders import Nominatim
 requests.packages.urllib3.disable_warnings()
 try:
         _create_unverified_https_context=ssl._create_unverified_context
@@ -37,6 +39,7 @@ def events(put,link):
 	launch_keywords = ["open", "launch"]
 	search_keywords = ["search", "google"]
 	wikipedia_keywords = ["wikipedia", "wiki"]
+	weather_keywords = ["weather", "will it rain", "temperature", "sunny"]
 	if any(word in put for word in youtube_keywords):
 		try:
 			link = '+'.join(link[1:])
@@ -91,6 +94,32 @@ def events(put,link):
 			webbrowser.open(wikisearch.url)
 		except:
 			print('Wikipedia could not either find the article or your Third-world connection is unstable')
+	   #find weather 
+	elif any(word in put for word in weather_keywords) :
+		try :
+			link = " ".join(link)
+			#to check whether weather for other location is needed (by keyword 'weather in')
+			index = link.find("weather in ") + len("weather in")
+			if index >= len("weather in") :
+				address = link[index:]
+				geocoder = Nominatim()
+				location = geocoder.geocode(address, timeout=15)
+				lat = location.latitude
+				lon = location.longitude
+				speak.say("Opening weather page for" + address)
+			else :
+				#weather in current location
+				location_url = 'http://freegeoip.net/json'
+				r = requests.get(location_url)
+				j = json.loads(r.text)
+				lat = j['latitude']
+				lon = j['longitude']
+				speak.say("Opening weather page")
+			speak.runAndWait()
+			webbrowser.open("https://weather.com/en-IN/weather/today/l/"+str(round(lat, 2))+","+str(round(lon, 2)))
+		except :
+			print("Sorry! cannot show weather today")
+	   
 	   #Lock the device 
 	elif put.startswith('secure '):
 		try:
@@ -196,7 +225,7 @@ class MyFrame(wx.Frame):
 			self.txt.SetValue("")
 			put=put.lower()
 			put = put.strip()
-			put = re.sub(r'[?|$|.|!]', r'', put)
+			#put = re.sub(r'[?|$|.|!]', r'', put)
 			link=put.split()
 			events(put,link)
 			
