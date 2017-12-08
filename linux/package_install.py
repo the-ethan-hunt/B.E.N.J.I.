@@ -30,6 +30,7 @@ if len(error) != 0 :
 #
 #checking if pip installed
 #
+print("checking if pip installed...")
 output, error = run(["pip3", "--version"])
 
 if len(error) != 0 :
@@ -48,6 +49,7 @@ else :
 #
 #Upgrade setuptools and wheel
 #
+print("upgrading setuptools and wheel...")
 output, error = runrealtime(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"])
 if len(error) != 0 :
     print(toString(error))
@@ -56,6 +58,7 @@ if len(error) != 0 :
 #
 # install packages from requirement.txt
 #
+print("installing required packages...")
 output, error = runrealtime(["pip3", "install", "-r", "requirements-linux.txt"])
 if len(error) != 0 :
     print(toString(error))
