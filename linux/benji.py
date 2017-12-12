@@ -16,6 +16,8 @@ import speech_recognition as sr
 import requests
 import pyttsx3
 import sys
+import subprocess
+
 requests.packages.urllib3.disable_warnings()
 try:
         _create_unverified_https_context=ssl._create_unverified_context
@@ -93,7 +95,7 @@ def events(put,link):
         try:
             speak.say("locking the device")
             speak.runAndWait()
-            ctypes.windll.user32.LockWorkStation()
+            subprocess.run("xdg-screensaver lock",shell=True,check=True)
         except :
             print('Cannot lock device')
 
