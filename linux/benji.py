@@ -16,6 +16,8 @@ import speech_recognition as sr
 import requests
 import pyttsx3
 import sys
+import subprocess
+
 requests.packages.urllib3.disable_warnings()
 try:
         _create_unverified_https_context=ssl._create_unverified_context
@@ -25,9 +27,6 @@ else:
         ssl._create_default_https_context=_create_unverified_https_context
 
 headers = {'''user-agent':'Chrome/53.0.2785.143'''}
-#speak=wicl.Dispatch("SAPI.SpVoice")
-
-# Creating the graphical user interface
 
 speak = pyttsx3.init()
 
@@ -92,16 +91,16 @@ def events(put,link):
         except:
             print('Wikipedia could not either find the article or your Third-world connection is unstable')
        #Lock the device
-    elif put.startswith('secure '):
+    elif put.startswith('secure'):
         try:
             speak.say("locking the device")
             speak.runAndWait()
-            ctypes.windll.user32.LockWorkStation()
+            subprocess.run("xdg-screensaver lock",shell=True,check=True)
         except :
             print('Cannot lock device')
 
         #News of various press agencies
-    elif put.startswith('aljazeera '):
+    elif put.startswith('aljazeera'):
         try:
             aljazeeraurl = ('https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(aljazeeraurl)
@@ -116,7 +115,7 @@ def events(put,link):
                 i += 1
         except:
             print('Qatari agents have refused to share this intel, Ethan')
-    elif put.startswith('bbc '):
+    elif put.startswith('bbc'):
         try:
             bbcurl = ('https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(bbcurl)
@@ -131,7 +130,7 @@ def events(put,link):
                 i += 1
         except:
             print('MI6 is going crazy! Not allowing this!')
-    elif put.startswith('cricket '):
+    elif put.startswith('cricket'):
         try:
             cricketurl = ('https://newsapi.org/v1/articles?source=espn-cric-info&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(cricketurl)
@@ -146,7 +145,7 @@ def events(put,link):
                 i += 1
         except:
             print('Connection not secure')
-    elif put.startswith('hindus '):
+    elif put.startswith('hindus'):
         try:
             hindusurl = ('https://newsapi.org/v1/articles?source=the-hindu&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(hindusurl)
@@ -187,8 +186,6 @@ class MyFrame(tk.Frame):
             if put=='':
                print('Reenter')
 
-         #Play song on  Youtube
-
     def OnClicked(self):
         r = sr.Recognizer()
         with sr.Microphone() as source:
@@ -201,7 +198,7 @@ class MyFrame(tk.Frame):
             self.textBox.insert('1.0',put)
             put=put.lower()
             put = put.strip()
-                #put = re.sub(r'[?|$|.|!]', r'', put)
+            put = re.sub(r'[?|$|.|!]', r'', put)
             link=put.split()
             events(put,link)
 
