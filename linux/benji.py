@@ -91,7 +91,7 @@ def events(put,link):
         except:
             print('Wikipedia could not either find the article or your Third-world connection is unstable')
        #Lock the device
-    elif put.startswith('secure '):
+    elif put.startswith('secure'):
         try:
             speak.say("locking the device")
             speak.runAndWait()
@@ -100,7 +100,7 @@ def events(put,link):
             print('Cannot lock device')
 
         #News of various press agencies
-    elif put.startswith('aljazeera '):
+    elif put.startswith('aljazeera'):
         try:
             aljazeeraurl = ('https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(aljazeeraurl)
@@ -130,7 +130,7 @@ def events(put,link):
                 i += 1
         except:
             print('MI6 is going crazy! Not allowing this!')
-    elif put.startswith('cricket '):
+    elif put.startswith('cricket'):
         try:
             cricketurl = ('https://newsapi.org/v1/articles?source=espn-cric-info&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(cricketurl)
@@ -145,7 +145,7 @@ def events(put,link):
                 i += 1
         except:
             print('Connection not secure')
-    elif put.startswith('hindus '):
+    elif put.startswith('hindus'):
         try:
             hindusurl = ('https://newsapi.org/v1/articles?source=the-hindu&sortBy=latest&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(hindusurl)
