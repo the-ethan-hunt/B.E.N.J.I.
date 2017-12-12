@@ -25,9 +25,6 @@ else:
         ssl._create_default_https_context=_create_unverified_https_context
 
 headers = {'''user-agent':'Chrome/53.0.2785.143'''}
-#speak=wicl.Dispatch("SAPI.SpVoice")
-
-# Creating the graphical user interface
 
 speak = pyttsx3.init()
 
@@ -116,7 +113,7 @@ def events(put,link):
                 i += 1
         except:
             print('Qatari agents have refused to share this intel, Ethan')
-    elif put.startswith('bbc '):
+    elif put.startswith('bbc'):
         try:
             bbcurl = ('https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=571863193daf421082a8666fe4b666f3')
             newsresponce = requests.get(bbcurl)
@@ -187,8 +184,6 @@ class MyFrame(tk.Frame):
             if put=='':
                print('Reenter')
 
-         #Play song on  Youtube
-
     def OnClicked(self):
         r = sr.Recognizer()
         with sr.Microphone() as source:
@@ -201,7 +196,7 @@ class MyFrame(tk.Frame):
             self.textBox.insert('1.0',put)
             put=put.lower()
             put = put.strip()
-                #put = re.sub(r'[?|$|.|!]', r'', put)
+            put = re.sub(r'[?|$|.|!]', r'', put)
             link=put.split()
             events(put,link)
 
