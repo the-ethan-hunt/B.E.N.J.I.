@@ -187,7 +187,7 @@ def events(frame, put,link):
 			webbrowser.open('https://news.google.com')
 		except:
 			print("Could not open Google News!")	
-	Translate
+	#Translate
 	elif any ( word in put for word in translate_keywords):
         try:
             say='+'.join(link[1:-2])
