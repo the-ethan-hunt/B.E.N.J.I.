@@ -135,7 +135,7 @@ def events(put):
 
     #locate a place    
     elif any(word in put for word in location_keywords):
-         try:
+        try:
             link='+'.join(link[1:])
             say=link.replace('+',' ')
             speak.Speak("locating "+ say)
@@ -212,8 +212,8 @@ def events(put):
             elif (link[len(link)-1] == "japanese" ):
                 lang = ja 
 
-           speak.Speak("translating"+say)
-           webbrowser.open('https://translate.google.com/#en/'+lang+'/'+link)
+            speak.Speak("translating"+say)
+            webbrowser.open('https://translate.google.com/#en/'+lang+'/'+link)
         except:
             speak.Speak('Sorry , I coudnt translate.')
             print('Sorry , I coudnt translate.')
