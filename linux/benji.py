@@ -49,8 +49,8 @@ def events(frame, put,link):
 	search_keywords = ["search ", "google "]
 	wikipedia_keywords = ["wikipedia ", "wiki "]
 	download_music=["download","download music"]
-  reminder_keywords = ["set a reminder"] 
-  translate_keywords = ["translate"]
+        reminder_keywords = ["set a reminder"] 
+        translate_keywords = ["translate"]
 
 	
 	global reminder_mode
