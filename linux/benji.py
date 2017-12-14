@@ -50,8 +50,8 @@ def events(put,link):
 	wikipedia_keywords = ["wikipedia ", "wiki "]
 	download_music=["download","download music"]
 	download_music = ["download","download music"]
-	reminder_keywords = ["set a reminder"]
-
+	reminder_keywords = ["set a reminder"] 
+        translate_keywords = ["translate"]
 	
 	global reminder_mode
 	if reminder_mode or any(word in put for word in reminder_keywords) :	
@@ -185,7 +185,7 @@ def events(put,link):
 			webbrowser.open('https://news.google.com')
 		except:
 			print("Could not open Google News!")	
-	#Google Translate
+	Translate
 	elif any ( word in put for word in translate_keywords):
         try:
             say='+'.join(link[1:-2])
@@ -221,6 +221,14 @@ def events(put,link):
         except:
             speak.Speak('Sorry , I coudnt translate.')
             print('Sorry , I coudnt translate.')
+		
+	#Google Translate
+    elif put.startswith("google translate"):
+        try:
+            speak.Speak("Opening google translate!")
+            webbrowser.open('https://translate.google.com')
+        except:
+            print("Could not open Google Translate!")
 	#Google Photos	
 	elif put.startswith("google photos"):
 		try:
