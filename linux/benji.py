@@ -49,8 +49,9 @@ def events(frame, put,link):
 	search_keywords = ["search ", "google "]
 	wikipedia_keywords = ["wikipedia ", "wiki "]
 	download_music=["download","download music"]
-  download_music = ["download","download music"]
-	reminder_keywords = ["set a reminder"]
+        reminder_keywords = ["set a reminder"] 
+        translate_keywords = ["translate"]
+
 	
 	global reminder_mode
 	if reminder_mode or any(word in put for word in reminder_keywords) :	
@@ -138,7 +139,22 @@ def events(frame, put,link):
 			speak.say("I am BENJI, a digital assistant declassified for civilian use. Previously I was used by the Impossible Missions Force")
 			speak.runAndWait()
 		except:
-			frame.displayText('Error. Try reading the ReadMe to know about me!')
+      frame.displayText('Error. Try reading the ReadMe to know about me!')
+      print('Error. Try reading the ReadMe to know about me!')
+
+
+	#locate a place    
+	elif any(word in put for word in location_keywords):
+		try:
+			link='+'.join(link[1:])
+			say=link.replace('+',' ')
+			speak.Speak("locating "+ say)
+			webbrowser.open('https://www.google.nl/maps/place/'+link)
+		except:
+			speak.Speak('The place seems to be sequestered.')
+			print('The place seems to be sequestered.')
+
+
 	#Open a webpage
 	elif any(word in put for word in launch_keywords):
 		try:
@@ -170,7 +186,52 @@ def events(frame, put,link):
 			speak.Speak("Opening google news!")
 			webbrowser.open('https://news.google.com')
 		except:
-			frame.displayText("Could not open Google News!")	
+			print("Could not open Google News!")	
+	#Translate
+	elif any ( word in put for word in translate_keywords):
+        try:
+            say='+'.join(link[1:-2])
+            say=say.replace('+',' ')
+            lang = en 
+            if ( link[-1] == "spanish" ):
+                lang = es 
+            elif ( link[-1] == "french" ):
+                lang = fr
+            elif ( link[-1] == "italian" ):
+                lang = it
+            elif ( link[-1] == "hindi" ):
+                lang = hi 
+            elif ( link[-1] == "dutch" ):
+                lang = nl 
+            elif (link[-1] == "german" ):
+                lang = ge 
+            elif (link[-1] == "polish" ):
+                lang = pl 
+            elif (link[-1] == "portuguese" ):
+                lang = pt 
+            elif (link[-1] == "chinese" ):
+                lang = zh-CN
+            elif (link[-1] == "bengali" ):
+                lang = bn 
+            elif (link[-1] == "arabic" ):
+                lang = ar
+            elif (link[-1] == "japanese" ):
+                lang = ja 
+
+            speak.Speak("translating"+say)
+            webbrowser.open('https://translate.google.com/#en/'+lang+'/'+link)
+        except:
+            speak.Speak('Sorry , I coudnt translate.')
+            print('Sorry , I coudnt translate.')
+		
+	#Google Translate
+    elif put.startswith("google translate"):
+        try:
+            speak.Speak("Opening google translate!")
+            webbrowser.open('https://translate.google.com')
+        except:
+            print("Could not open Google Translate!")
+            frame.displayText("Could not open Google News!")	
 	#Google Translate
 	elif put.startswith("google translate"):
 		try:
@@ -178,6 +239,7 @@ def events(frame, put,link):
 			webbrowser.open('https://translate.google.com')
 		except:
 			frame.displayText("Could not open Google Translate!")
+
 	#Google Photos	
 	elif put.startswith("google photos"):
 		try:
@@ -354,6 +416,7 @@ def events(frame, put,link):
 		except:
 			frame.displayText('R&A W is blocking our reports, Ethan. Sorry! ')
 
+
 	# Finding files in pc
 	elif put1.startswith('lookfor '):
 			try:
@@ -527,4 +590,6 @@ if __name__=="__main__":
 	root.iconphoto(True, tk.PhotoImage(file=os.path.join(sys.path[0],'benji_final.gif')))
 	root.title('B.E.N.J.I.')
 	root.resizable(0,0)
+
 	root.mainloop()
+

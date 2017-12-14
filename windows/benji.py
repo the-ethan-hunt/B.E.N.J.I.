@@ -36,6 +36,7 @@ speak=wicl.Dispatch("SAPI.SpVoice")
 i=0
 
 def events(put):
+
     identity_keywords = ["who are you", "who r u", "what is your name"]
     youtube_keywords = ["play", "stream", "queue"]
     launch_keywords = ["open ", "launch "]
@@ -44,7 +45,9 @@ def events(put):
     location_keywords = ["locate","spot"]
     check_keywords = ["what","when","was","how","has","had","should","would","can","could","cool","good"] #could or cool or good
     download_music=["download","download music"]
+    translate_keywords = ["translate"]
     link = put.split()
+
   
 	#Add note
     if put.startswith("note") or put.startswith("not") or put.startswith("node"):
@@ -128,7 +131,9 @@ def events(put):
          ydl = youtube_dl.YoutubeDL(ydl_opts)
          ydl.download(['https://www.youtube.com'+hit])
          speak.speak("download completed.Check your desktop for the song")
-         
+
+
+    #locate a place    
     elif any(word in put for word in location_keywords):
         try:
             link='+'.join(link[1:])
@@ -138,6 +143,7 @@ def events(put):
         except:
             speak.Speak('The place seems to be sequestered.')
             print('The place seems to be sequestered.')
+
 	#Who are you?
     elif any(word in put for word in identity_keywords):
         try: 
@@ -175,6 +181,42 @@ def events(put):
             webbrowser.open('https://news.google.com')
         except:
             print("Could not open Google News!")	
+       # Translate
+    elif any ( word in put for word in translate_keywords):
+        try:
+            say='+'.join(link[1:len(link)-2])
+            say=say.replace('+',' ')
+            lang = en 
+            if ( link[-1] == "spanish" ):
+                lang = es 
+            elif ( link[-1] == "french" ):
+                lang = fr
+            elif ( link[-1] == "italian" ):
+                lang = it
+            elif ( link[-1] == "hindi" ):
+                lang = hi 
+            elif ( link[-1] == "dutch" ):
+                lang = nl 
+            elif (link[-1] == "german" ):
+                lang = ge 
+            elif (link[-1] == "polish" ):
+                lang = pl 
+            elif (link[-1] == "portuguese" ):
+                lang = pt 
+            elif (link[-1] == "chinese" ):
+                lang = zh-CN
+            elif (link[-1] == "bengali" ):
+                lang = bn 
+            elif (link[-1] == "arabic" ):
+                lang = ar
+            elif (link[-1] == "japanese" ):
+                lang = ja 
+
+            speak.Speak("translating"+say)
+            webbrowser.open('https://translate.google.com/#en/'+lang+'/'+link)
+        except:
+            speak.Speak('Sorry , I coudnt translate.')
+            print('Sorry , I coudnt translate.')
 	#Google Translate
     elif put.startswith("google translate"):
         try:
@@ -182,6 +224,8 @@ def events(put):
             webbrowser.open('https://translate.google.com')
         except:
             print("Could not open Google Translate!")
+   
+
 	#Google Photos	
     elif put.startswith("google photos"):
         try:
