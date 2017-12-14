@@ -181,35 +181,35 @@ def events(put):
             webbrowser.open('https://news.google.com')
         except:
             print("Could not open Google News!")	
-	#Google Translate
+       # Translate
     elif any ( word in put for word in translate_keywords):
         try:
-            link='+'.join(link[1:len(link)-2])
-            say=link.replace('+',' ')
+            say='+'.join(link[1:len(link)-2])
+            say=say.replace('+',' ')
             lang = en 
-            if ( link[len(link)-1] == "spanish" ):
+            if ( link[-1] == "spanish" ):
                 lang = es 
-            elif ( link[len(link)-1] == "french" ):
+            elif ( link[-1] == "french" ):
                 lang = fr
-            elif ( link[len(link)-1] == "italian" ):
+            elif ( link[-1] == "italian" ):
                 lang = it
-            elif ( link[len(link)-1] == "hindi" ):
+            elif ( link[-1] == "hindi" ):
                 lang = hi 
-            elif ( link[len(link)-1] == "dutch" ):
+            elif ( link[-1] == "dutch" ):
                 lang = nl 
-            elif (link[len(link)-1] == "german" ):
+            elif (link[-1] == "german" ):
                 lang = ge 
-            elif (link[len(link)-1] == "polish" ):
+            elif (link[-1] == "polish" ):
                 lang = pl 
-            elif (link[len(link)-1] == "portuguese" ):
+            elif (link[-1] == "portuguese" ):
                 lang = pt 
-            elif (link[len(link)-1] == "chinese" ):
+            elif (link[-1] == "chinese" ):
                 lang = zh-CN
-            elif (link[len(link)-1] == "bengali" ):
+            elif (link[-1] == "bengali" ):
                 lang = bn 
-            elif (link[len(link)-1] == "arabic" ):
+            elif (link[-1] == "arabic" ):
                 lang = ar
-            elif (link[len(link)-1] == "japanese" ):
+            elif (link[-1] == "japanese" ):
                 lang = ja 
 
             speak.Speak("translating"+say)
@@ -217,6 +217,14 @@ def events(put):
         except:
             speak.Speak('Sorry , I coudnt translate.')
             print('Sorry , I coudnt translate.')
+	#Google Translate
+    elif put.startswith("google translate"):
+        try:
+            speak.Speak("Opening google translate!")
+            webbrowser.open('https://translate.google.com')
+        except:
+            print("Could not open Google Translate!")
+   
 
 	#Google Photos	
     elif put.startswith("google photos"):
