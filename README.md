@@ -66,6 +66,7 @@ Contributions are welcomed heartily; any new `feature` or a `bug fix` is great! 
 3. How to use the locate feature ?
 * Say "locate Pisa" and B.E.N.J.I. will open google maps showing the requested feature .
 
+
 ### License
 
 [(Back to top)](#list-of-contents)

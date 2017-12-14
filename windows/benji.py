@@ -116,6 +116,7 @@ def events(put):
          ydl = youtube_dl.YoutubeDL(ydl_opts)
          ydl.download(['https://www.youtube.com'+hit])
          speak.speak("download completed.Check your desktop for the song")
+
     #locate a place    
 	elif any(word in put for word in location_keywords):
 		try:
@@ -165,40 +166,40 @@ def events(put):
 			print("Could not open Google News!")	
 	#Google Translate
 	elif any ( word in put for word in translate_keywords):
-        try:
-            link='+'.join(link[1:len(link)-2])
-            say=link.replace('+',' ')
-            lang = en 
-            if ( link[len(link)-1] == "spanish" ):
-                lang = es 
-            elif ( link[len(link)-1] == "french" ):
-                lang = fr
-            elif ( link[len(link)-1] == "italian" ):
-                lang = it
-            elif ( link[len(link)-1] == "hindi" ):
-                lang = hi 
-            elif ( link[len(link)-1] == "dutch" ):
-                lang = nl 
-            elif (link[len(link)-1] == "german" ):
-                lang = ge 
-            elif (link[len(link)-1] == "polish" ):
-                lang = pl 
-            elif (link[len(link)-1] == "portuguese" ):
-                lang = pt 
-            elif (link[len(link)-1] == "chinese" ):
-                lang = zh-CN
-            elif (link[len(link)-1] == "bengali" ):
-                lang = bn 
-            elif (link[len(link)-1] == "arabic" ):
-                lang = ar
-            elif (link[len(link)-1] == "japanese" ):
-                lang = ja 
+    try:
+      link='+'.join(link[1:len(link)-2])
+       say=link.replace('+',' ')
+       lang = en 
+       if ( link[len(link)-1] == "spanish" ):
+          lang = es 
+       elif ( link[len(link)-1] == "french" ):
+          lang = fr
+       elif ( link[len(link)-1] == "italian" ):
+          lang = it
+       elif ( link[len(link)-1] == "hindi" ):
+          lang = hi 
+       elif ( link[len(link)-1] == "dutch" ):
+          lang = nl 
+       elif (link[len(link)-1] == "german" ):
+          lang = ge 
+       elif (link[len(link)-1] == "polish" ):
+          lang = pl 
+       elif (link[len(link)-1] == "portuguese" ):
+          lang = pt 
+       elif (link[len(link)-1] == "chinese" ):
+          lang = zh-CN
+       elif (link[len(link)-1] == "bengali" ):
+          lang = bn 
+       elif (link[len(link)-1] == "arabic" ):
+          lang = ar
+       elif (link[len(link)-1] == "japanese" ):
+          lang = ja 
 
-            speak.Speak("translating"+say)
-            webbrowser.open('https://translate.google.com/#en/'+lang+'/'+link)
-        except:
-            speak.Speak('Sorry , I coudnt translate.')
-            print('Sorry , I coudnt translate.')
+       speak.Speak("translating"+say)
+       webbrowser.open('https://translate.google.com/#en/'+lang+'/'+link)
+       except:
+        speak.Speak('Sorry , I coudnt translate.')
+        print('Sorry , I coudnt translate.')
 	#Google Photos	
 	elif put.startswith("google photos"):
 		try:

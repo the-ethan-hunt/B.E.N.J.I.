@@ -48,10 +48,9 @@ def events(put,link):
 	launch_keywords = ["open ", "launch "]
 	search_keywords = ["search ", "google "]
 	wikipedia_keywords = ["wikipedia ", "wiki "]
-    download_music=["download","download music"]
+  download_music=["download","download music"]
 	reminder_keywords = ["set a reminder"]
-	locate_keywords = ["locate","spot"]
-	translate_keywords = ["translate"]
+
 	
 	global reminder_mode
 	if reminder_mode or any(word in put for word in reminder_keywords) :	
@@ -141,6 +140,7 @@ def events(put,link):
 		except:
 			print('Error. Try reading the ReadMe to know about me!')
 
+
 	#locate a place    
 	elif any(word in put for word in location_keywords):
 		try:
@@ -151,6 +151,7 @@ def events(put,link):
 		except:
 			speak.Speak('The place seems to be sequestered.')
 			print('The place seems to be sequestered.')
+
 	#Open a webpage
 	elif any(word in put for word in launch_keywords):
 		try:
@@ -520,4 +521,4 @@ if __name__=="__main__":
 	root.iconphoto(True, tk.PhotoImage(file=os.path.join(sys.path[0],'benji_final.gif')))
 	root.title('B.E.N.J.I.')
 	root.resizable(0,0)
-	root.mainloop()
+  root.mainloop()
