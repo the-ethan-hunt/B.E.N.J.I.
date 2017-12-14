@@ -48,7 +48,7 @@ def events(put,link):
 	launch_keywords = ["open ", "launch "]
 	search_keywords = ["search ", "google "]
 	wikipedia_keywords = ["wikipedia ", "wiki "]
-  download_music=["download","download music"]
+  	download_music = ["download","download music"]
 	reminder_keywords = ["set a reminder"]
 
 	
@@ -396,6 +396,47 @@ def events(put,link):
 		except:
 			print('R&A W is blocking our reports, Ethan. Sorry! ')
 
+		# Finding files in pc
+        elif put1.startswith('lookfor '):
+                try:
+                    link1=put1.split()
+                    name=link1[1]
+                    rex=regex.compile(name)
+                    filepath=link1[2]
+                    for root,dirs,files in os.walk(os.path.normpath(filepath)):
+                        for f in files:
+                            result = rex.search(f)
+                            if result:
+                                print (os.path.join(root, f))
+                    
+                except:
+                    print("Error")
+
+
+
+
+i=0
+class MyFrame(wx.Frame):
+		def __init__(self):
+			wx.Frame.__init__(self,None,pos=wx.DefaultPosition,size=wx.Size(400,200), title="BENJI")
+			panel=wx.Panel(self)
+			ico= wx.Icon('benji_final.ico',wx.BITMAP_TYPE_ICO)
+			self.SetIcon(ico)
+			my_sizer=wx.BoxSizer(wx.VERTICAL)
+			lbl=wx.StaticText(panel,label="Hello Agent! How can I help you")
+			my_sizer.Add(lbl,0,wx.ALL,6)
+			
+			
+			self.txt=wx.TextCtrl(panel,style=wx.TE_PROCESS_ENTER,size=(400,40))
+			self.txt.Bind(wx.EVT_TEXT_ENTER,self.OnEnter)
+			my_sizer.Add(self.txt,0,wx.ALL,6)
+			
+			self.btn = wx.Button(panel,6,"click to Speak")
+			my_sizer.Add(self.btn,0,wx.ALIGN_CENTER,6)
+			self.btn.Bind(wx.EVT_BUTTON,self.OnClicked) 
+			panel.SetSizer(my_sizer)
+=======
+
 #A customized thread class for tracking reminders
 class reminderThread(threading.Thread):
 	
@@ -434,6 +475,7 @@ class reminderThread(threading.Thread):
 					print(reminder[0]+'\t\t'+reminder[1])
 				self.reminder_given_flag = True
 			time.sleep(1)
+
 			
 	def removePastReminders(self):
 		try :
@@ -512,6 +554,7 @@ class MyFrame(tk.Frame):
 	def displayText(self, text):
 			print(text)	
 
+
 	#Trigger the GUI. Light the fuse!
 if __name__=="__main__":
 	root = tk.Toplevel()
@@ -521,4 +564,6 @@ if __name__=="__main__":
 	root.iconphoto(True, tk.PhotoImage(file=os.path.join(sys.path[0],'benji_final.gif')))
 	root.title('B.E.N.J.I.')
 	root.resizable(0,0)
-  root.mainloop()
+
+	root.mainloop()
+
