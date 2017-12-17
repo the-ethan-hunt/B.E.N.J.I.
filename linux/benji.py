@@ -45,7 +45,6 @@ reminder = str()
 speak = pyttsx3.init()
 
 def events(put,link):
-	global view
 	frame=view
 	identity_keywords = ["who are you", "who r u", "what is your name"]
 	youtube_keywords = ["play ", "stream ", "queue "]
@@ -455,7 +454,6 @@ class StdRedirector(object):
 
 
 def speechrecognition():
-	global view
 	r = sr.Recognizer()
 	with sr.Microphone() as source:
 		speak.say('Hey I am Listening ')
@@ -463,7 +461,6 @@ def speechrecognition():
 		audio = r.listen(source)
 	try:	
 		put=r.recognize_google(audio)
-		view.displayText(put)
 		view.textBox.insert('1.0',put)
 		put=put.lower()
 		put = put.strip()
