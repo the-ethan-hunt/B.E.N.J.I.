@@ -22,6 +22,7 @@ import requests
 from pptx import Presentation
 from xlsxwriter import Workbook
 import subprocess
+import sys
 
 requests.packages.urllib3.disable_warnings()
 try:
@@ -222,8 +223,9 @@ def events(put):
             webbrowser.open('https://castbox.fm/home')
         except:
             print("Could not open podcast!")
-    #Lock the device
-    elif put.startswith('secure '):
+
+    #Lock the device 
+    elif put.startswith('secure ') or put.startswith('lock '):
         try:
             speak.Speak("locking the device")
             ctypes.windll.user32.LockWorkStation()
@@ -358,6 +360,9 @@ def speechrecognition():
         put=None
         return
 
+
+    elif put.startswith('exit') or put.startswith('quit'):
+        sys.exit()
 
 class MyFrame(wx.Frame):
 		def __init__(self):
