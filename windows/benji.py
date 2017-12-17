@@ -335,6 +335,7 @@ def events(put):
 
 
 def speechrecognition():
+    global frame
     r = sr.Recognizer()
     with sr.Microphone() as source:
         speak.Speak('Hey I am Listening ')
@@ -343,6 +344,7 @@ def speechrecognition():
         put=r.recognize_google(audio)
      #   ob.txt.SetValue(put)
         print(put)
+        frame.txt.SetValue(put)
         newthread=threading.Thread(target=events,args=[put])
         newthread.start()
         return
