@@ -42,14 +42,15 @@ reminder = str()
 
 speak = pyttsx3.init()
 
-def events(frame, put,link):
+def events(put,link):
+	global view
+	frame=view
 	identity_keywords = ["who are you", "who r u", "what is your name"]
 	youtube_keywords = ["play ", "stream ", "queue "]
 	launch_keywords = ["open ", "launch "]
 	search_keywords = ["search ", "google "]
 	wikipedia_keywords = ["wikipedia ", "wiki "]
 	download_music=["download","download music"]
-  download_music = ["download","download music"]
 	reminder_keywords = ["set a reminder"]
 	
 	global reminder_mode
@@ -439,6 +440,29 @@ class StdRedirector(object):
 		
 	def write(self, output):
 		self.text_window.insert(tk.END, output)
+
+
+def speechrecognition():
+	global view
+	r = sr.Recognizer()
+	with sr.Microphone() as source:
+		speak.say('Hey I am Listening ')
+		speak.runAndWait()
+		audio = r.listen(source)
+	try:	
+		put=r.recognize_google(audio)
+		view.displayText(put)
+		view.textBox.insert('1.0',put)
+		put=put.lower()
+		put = put.strip()
+			#put = re.sub(r'[?|$|.|!]', r'', put)
+		link=put.split()
+		newthread1=threading.Thread(target=events,args=[put,link])
+		newthread1.start()
+	except sr.UnknownValueError:
+		view.displayText("Could not understand audio")
+	except sr.RequestError as e:
+		view.displayText("Could not request results; {0}".format(e))
 		
 class MyFrame(tk.Frame):
 	def __init__(self,*args,**kwargs):
@@ -473,29 +497,16 @@ class MyFrame(tk.Frame):
 			put = put.strip()
 			#put = re.sub(r'[?|$|.|!]', r'', put)
 			link=put.split()
-			events(self, put,link)
+			start_newthread=threading.Thread(target=events,args=[put,link])
+			start_newthread.start()
 			if put=='':
 			   self.displayText('Reenter')
 
 	def OnClicked(self):
-		r = sr.Recognizer()
-		with sr.Microphone() as source:
-			speak.say('Hey I am Listening ')
-			speak.runAndWait()
-			audio = r.listen(source)
-		try:
-			put=r.recognize_google(audio)
-			self.displayText(put)
-			self.textBox.insert('1.0',put)
-			put=put.lower()
-			put = put.strip()
-			#put = re.sub(r'[?|$|.|!]', r'', put)
-			link=put.split()
-			events(put,link)
-		except sr.UnknownValueError:
-			self.displayText("Could not understand audio")
-		except sr.RequestError as e:
-			self.displayText("Could not request results; {0}".format(e))
+		newthread = threading.Thread(target=speechrecognition,args=[])
+		newthread.start()
+
+
 	
 	def onClose(self, event):
 			global reminder_thread
