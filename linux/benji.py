@@ -44,7 +44,9 @@ reminder = str()
 
 speak = pyttsx3.init()
 
-def events(frame, put,link):
+def events(put,link):
+	global view
+	frame=view
 	identity_keywords = ["who are you", "who r u", "what is your name"]
 	youtube_keywords = ["play ", "stream ", "queue "]
 	launch_keywords = ["open ", "launch "]
@@ -166,112 +168,131 @@ def events(frame, put,link):
 		try:
 			link='+'.join(link[2:])
 			say=link.replace('+',' ')
-			speak.Speak("searching images of " + say)
+			speak.say("searching images of " + say)
+			speak.runAndWait()
 			webbrowser.open('https://www.google.co.in/search?q=' + link + '&source=lnms&tbm=isch')
 		except:
-			frame.displayText('Could search for images!')
+			frame.displayText('Sorry Ethan,unable to access it. Cannot hack either-IMF protocol!')
+
+
+
 	#Gmail
 	elif put.startswith("gmail"):
 		try:
-			speak.Speak("Opening Gmail!")
+			speak.say("Opening Gmail!")
+			speak.runAndWait()
 			webbrowser.open('https://www.google.com/gmail')
 		except:
 			frame.displayText("Could not open Gmail!")
 	#Google News
 	elif put.startswith("google news"):
 		try:
-			speak.Speak("Opening google news!")
+			speak.say("Opening google news!")
+			speak.runAndWait()
 			webbrowser.open('https://news.google.com')
 		except:
 			frame.displayText("Could not open Google News!")
 	#Google Translate
 	elif put.startswith("google translate"):
 		try:
-			speak.Speak("Opening google translate!")
+			speak.say("Opening google translate!")
+			speak.runAndWait()
 			webbrowser.open('https://translate.google.com')
 		except:
 			frame.displayText("Could not open Google Translate!")
 	#Google Photos
 	elif put.startswith("google photos"):
 		try:
-			speak.Speak("Opening google photos!")
+			speak.say("Opening google photos!")
+			speak.runAndWait()
 			webbrowser.open('https://photos.google.com')
 		except:
 			frame.displayText("Could not open Google Photos!")
 	#Google Drive
 	elif put.startswith("google drive"):
 		try:
-			speak.Speak("Opening google drive!")
+			speak.say("Opening google drive!")
+			speak.runAndWait()
 			webbrowser.open('https://drive.google.com')
 		except:
 			frame.displayText("Could not open Google Drive!")
 	#Google Plus
 	elif put.startswith("google plus"):
 		try:
-			speak.Speak("Opening google plus!")
+			speak.say("Opening google plus!")
+			speak.runAndWait()
 			webbrowser.open('https://plus.google.com')
 		except:
 			frame.displayText("Could not open Google Plus!")
 	#Google Forms
 	elif put.startswith("google forms"):
 		try:
-			speak.Speak("Opening google forms!")
+			speak.say("Opening google forms!")
+			speak.runAndWait()
 			webbrowser.open('https://docs.google.com/forms')
 		except:
 			frame.displayText("Could not open Google Forms!")
 	#Google Document
 	elif put.startswith("google document"):
 		try:
-			speak.Speak("Opening google docs!")
+			speak.say("Opening google docs!")
+			speak.runAndWait()
 			webbrowser.open('https://docs.google.com/document')
 		except:
 			frame.displayText("Could not open Google Docs!")
 	#Google Sheets
 	elif put.startswith("google sheets"):
 		try:
-			speak.Speak("Opening google sheets!")
+			speak.say("Opening google sheets!")
+			speak.runAndWait()
 			webbrowser.open('https://docs.google.com/spreadsheets')
 		except:
 			frame.displayText("Could not open Google Sheets!")
 	#Google Slides
 	elif put.startswith("google slides"):
 		try:
-			speak.Speak("Opening google slides!")
+			speak.say("Opening google slides!")
+			speak.runAndWait()
 			webbrowser.open('https://docs.google.com/presentation')
 		except:
 			frame.displayText("Could not open Google Slides!")
 	#Google Groups
 	elif put.startswith("google groups"):
 		try:
-			speak.Speak("Opening google groups!")
+			speak.say("Opening google groups!")
+			speak.runAndWait()
 			webbrowser.open('https://groups.google.com')
 		except:
 			frame.displayText("Could not open Google Groups!")
 	#Google Earth
 	elif put.startswith("google earth"):
 		try:
-			speak.Speak("Opening google earth!")
+			speak.say("Opening google earth!")
+			speak.runAndWait()
 			webbrowser.open('https://www.google.com/earth')
 		except:
 			frame.displayText("Could not open Google Earth!")
 	#Google Cloud frame.displayText
 	elif put.startswith("google cloud print"):
 		try:
-			speak.Speak("Opening google cloud print!")
+			speak.say("Opening google cloud print!")
+			speak.runAndWait()
 			webbrowser.open('https://www.google.com/cloudprint')
 		except:
 			frame.displayText("Could not open Google Cloud Print!")
 	#Google Fonts
 	elif put.startswith("google fonts"):
 		try:
-			speak.Speak("Opening google fonts!")
+			speak.say("Opening google fonts!")
+			speak.runAndWait()
 			webbrowser.open('https://fonts.google.com')
 		except:
 			frame.displayText("Could not open Google Fonts!")
 	#Blogger
 	elif put.startswith("blogger"):
 		try:
-			speak.Speak("Opening blogger!")
+			speak.say("Opening blogger!")
+			speak.runAndWait()
 			webbrowser.open('https://www.blogger.com')
 		except:
 			frame.displayText("Could not open Blogger!")
@@ -453,6 +474,27 @@ class StdRedirector(object):
 	def write(self, output):
 		self.text_window.insert(tk.END, output)
 
+
+def speechrecognition():
+	r = sr.Recognizer()
+	with sr.Microphone() as source:
+		speak.say('Hey I am Listening ')
+		speak.runAndWait()
+		audio = r.listen(source)
+	try:	
+		put=r.recognize_google(audio)
+		view.textBox.insert('1.0',put)
+		put=put.lower()
+		put = put.strip()
+			#put = re.sub(r'[?|$|.|!]', r'', put)
+		link=put.split()
+		newthread1=threading.Thread(target=events,args=[put,link])
+		newthread1.start()
+	except sr.UnknownValueError:
+		view.displayText("Could not understand audio")
+	except sr.RequestError as e:
+		view.displayText("Could not request results; {0}".format(e))
+		
 class MyFrame(tk.Frame):
 	def __init__(self,*args,**kwargs):
 		#new Thread to track reminders
@@ -494,37 +536,19 @@ class MyFrame(tk.Frame):
 
 	def OnEnter(self,event):
 			put=self.textBox.get("1.2","end-1c")
-			print(put)
 			self.textBox.delete('1.2',tk.END)
 			put=put.lower()
 			put = put.strip()
 			#put = re.sub(r'[?|$|.|!]', r'', put)
 			link=put.split()
-			events(self, put,link)
+			start_newthread=threading.Thread(target=events,args=[put,link])
+			start_newthread.start()
 			if put=='':
 			   self.displayText('Reenter')
 
 	def OnClicked(self):
-		r = sr.Recognizer()
-		with sr.Microphone() as source:
-			speak.say('Hey I am Listening ')
-			speak.runAndWait()
-			audio = r.listen(source)
-		try:
-			put=r.recognize_google(audio)
-
-			self.displayText(put)
-			self.textBox.insert('1.2',put)
-			put=put.lower()
-			put = put.strip()
-			#put = re.sub(r'[?|$|.|!]', r'', put)
-			link=put.split()
-			events(self,put,link)
-		except sr.UnknownValueError:
-			self.displayText("Could not understand audio")
-		except sr.RequestError as e:
-			self.displayText("Could not request results; {0}".format(e))
-
+		newthread = threading.Thread(target=speechrecognition,args=[])
+		newthread.start()
 	def onClose(self, event):
 			global reminder_thread
 			reminder_thread.event.set()
