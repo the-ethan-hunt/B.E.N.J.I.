@@ -50,7 +50,13 @@ def events(frame,put):
     search_pc= ("find ","lookfor ")
     close_keywords=("close ","over ","stop ","exit ")
     link = put.split()
-  
+
+    if put.startswith("What time") or put.startswith("time"):
+        try:
+            speak.say("The time is;" + time.ctime())
+            speak.runAndWait()
+        except:
+            speak.say("That's not working.")
 	#Add note
     if put.startswith("note") or put.startswith("not") or put.startswith("node"):
         try:
