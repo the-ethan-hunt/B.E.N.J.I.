@@ -44,6 +44,7 @@ List of the things that B.E.N.J.I. can do:
 * Restart your device
 * Create a file(txt, docx, pptx,xlsx, vsdx and rtf supported)
 * Turn on and Turn off the wifi
+* Tell the present time
 * Launch any application
 
 Keep reading to see how to do all the above mentioned jobs with B.E.N.J.I.
@@ -80,6 +81,7 @@ The commands for the various functions are as follows:
     * "_firefox_" for Mozilla Firefox
     * "_calculator_" for Calculator
     * "_office_" for Libre Office
+* "***time/what time***" to get exact time.
 
 
 >* In cases where the commands are separated by '/', use any one of the mentioned commands

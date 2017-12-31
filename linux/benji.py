@@ -304,6 +304,15 @@ def events(frame, put,link):
             os.system("nmcli radio wifi off")
             speak.say("Disabling Wifi")
             speak.runAndWait()
+
+    #time
+    if put.startswith("What time") or put.startswith("time"):
+        try:
+            speak.say("The time is " + time.ctime())
+            speak.runAndWait()       
+        except:            
+            speak.say("That's not working.")
+
             
     #print files
     elif put.startswith('print '):
@@ -314,6 +323,7 @@ def events(frame, put,link):
             subprocess.run("lpr "+found,shell=True,check=True)
         except:
             speak.say("Sorry,couldn't print")
+
 
 #A customized thread class for tracking reminders
 class reminderThread(threading.Thread):

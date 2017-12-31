@@ -121,7 +121,7 @@ def events(frame, put,link):
 			system("creating note")
 		except:
 			frame.displayText('Sorry , cannot create note')
-    #application launcher
+	#application launcher
 	elif any(word in put for word in launcher_keywords):
 		try:
 			link = '+'.join(link[1:])
@@ -360,6 +360,13 @@ def events(frame, put,link):
 			webbrowser.open(wikisearch.url)
 		except:
 			frame.displayText('Wikipedia could not either find the article or your Third-world connection is unstable')
+	#time
+	elif put.startswith("What time") or put.startswith("time"):
+		try:
+			print("say The time is " + time.ctime())
+			system("say The time is " + time.ctime())
+		except:
+			system("say That's not working.")
 
 	#News of various press agencies
 	elif put.startswith('al jazeera '):
