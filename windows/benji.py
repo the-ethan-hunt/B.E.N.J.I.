@@ -47,7 +47,8 @@ def events(frame,put):
     location_keywords = ["locate","spot"]
     check_keywords = ["what","when","was","how","has","had","should","would","can","could","cool","good"] #could or cool or good
     download_music=("download ","download music ")
-    
+    search_pc= ("find ","lookfor ")
+    close_keywords=("close ","over ","stop ","exit ")
     link = put.split()
   
 	#Add note
@@ -167,25 +168,56 @@ def events(frame,put):
                 elif (form_in == "avi" or form_in == "webm" or form_in == "mp4" or form_in == "mkv" or form_in == "mp3" or form_in == "m4a") and (form_out == "m4a" or form_out == "mp3"):
                     subprocess.call(r'''ffmpeg -i {} {}'''.format(video1,video2), shell = True)
         except:
-            print("Unable to process requested service!")                        
-    #Look for
-    elif put.startswith('look for '):
+            print("Unable to process requested service!")
+    
+    #Closing Benji
+    elif put.startswith(close_keywords):
+        os._exit(0)
+
+                       
+    #Images to video
+    elif put.startswith("images to video "):
         try:
-            link1=put.split()
-            name=link1[2]
+            framerate = link[3]
+            username = os.getlogin()
+            os.chdir(r'''C:\Users\{}\Desktop\Images'''.format(username))
+            subprocess.call(r'''ffmpeg -framerate 1/{} -i img%03d.jpg -vcodec mpeg4 -vtag xvid -qscale:v 0 -crf 0 output.avi'''.format(framerate),shell=True)
+            speak.say("Video created!")
+            speak.runAndWait()
+        except:
+            print("Unable to create video file!")
+    elif put.startswith(search_pc):
+        try:
+            name=link[1]
             rex=regex.compile(name)
-            filepath=link1[3]
+            filepath=link[2]
+            realpath=filepath
             for root,dirs,files in os.walk(os.path.normpath(filepath)):
                 for f in files:
                     result = rex.search(f)
                     if result:
-                        print (os.path.join(root, f))
+                        realpath=os.path.join(root, f)
+                        print (realpath+"\n")
+            os.startfile(realpath)
         except:
             print("Error")
 
     put = put.lower()
     put = put.strip()
     link = put.split()
+#    elif put.startswith(search_pc):
+#        process=subprocess.Popen("dir /b/s "+link[1],shell=True,stdout=subprocess.PIPE)
+#        while True:
+#            output = process.stdout.readline()
+#            if output == '' and process.poll() is not None:
+#                break
+#            if output:
+#                print (output.strip()+"\n")
+#                outp=output
+#        try:
+#            os.startfile(outp)
+#        except:
+#            speak.say("Sorry,couldn't open")
 
 	#Play song on youtube
     if put.startswith(youtube_keywords):
@@ -569,3 +601,4 @@ if __name__=="__main__":
     root.configure(background="#444")
     root.resizable(0,0)
     root.mainloop()
+
