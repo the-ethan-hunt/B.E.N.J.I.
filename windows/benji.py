@@ -188,7 +188,8 @@ def events(frame,put):
             speak.runAndWait()
         except:
             print("Unable to create video file!")
-    
+
+    #Play Local Audio/Video Files
     elif put.startswith(play_local_files):
         try:
             link = put[13:]
@@ -199,6 +200,7 @@ def events(frame,put):
         except:
             print("Error")
 
+    #Find File in The System
     elif put.startswith(search_pc):
         try:
             name=link[1]
