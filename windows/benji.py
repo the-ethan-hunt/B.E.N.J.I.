@@ -49,6 +49,7 @@ def events(frame,put):
     check_keywords = ["what","when","was","how","has","had","should","would","can","could","cool","good"] #could or cool or good
     download_music=("download ","download music ")
     search_pc= ("find ","lookfor ")
+    play_local_files = ("offline play ")
     close_keywords=("close ","over ","stop ","exit ")
     link = put.split()
   
@@ -187,6 +188,17 @@ def events(frame,put):
             speak.runAndWait()
         except:
             print("Unable to create video file!")
+    
+    elif put.startswith(play_local_files):
+        try:
+            link = put[13:]
+            name = link.split("\\")
+            speak.say("playing "+name[-1])
+            speak.runAndWait()
+            webbrowser.open(link)
+        except:
+            print("Error")
+
     elif put.startswith(search_pc):
         try:
             name=link[1]
