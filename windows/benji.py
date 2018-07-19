@@ -44,6 +44,7 @@ import cv2
 import tweepy
 from tweepy import OAuthHandler
 import twitterCredentials
+from googletrans import Translator
 
 requests.packages.urllib3.disable_warnings()
 try:
@@ -58,7 +59,7 @@ headers = {'''user-agent':'Chrome/53.0.2785.143'''}
 speak = pyttsx3.init()
 
 def events(frame,put):
-	identity_keywords = ["who are you", "who r u", "what is your name"]
+	identity_keywords = ["who are you", "who r u", "what is your name", "who you are"]
 	youtube_keywords = ("play ", "stream ", "queue ")
 	launch_keywords = ["open ", "launch "]
 	search_keywords = ["search "]
@@ -72,6 +73,15 @@ def events(frame,put):
 	pc_locations = ("desktop", "documents", "downloads")
 	
 	put = put.lower()
+	translator = Translator()
+	if put.startswith("spanish"):
+		word, space, rest = put.partition(' ')
+		translated = translator.translate(rest, src='es', dest='en')
+		put = translated.text
+	elif put.startswith("french"):
+		word, space, rest = put.partition(' ')
+		translated = translator.translate(rest, src='fr', dest='en')
+		put = translated.text
 	link = put.split()
 
 	#Add user for face detection
@@ -83,7 +93,7 @@ def events(frame,put):
 		cv2.imwrite(path + "/" + str(name) + ".jpg", img)
 		cam.release()
 		cv2.destroyAllWindows()
-	
+		
 	#Get top 10 tweets
 	elif link[0] == "get" and link[-1] == "tweets":
 		auth = OAuthHandler(twitterCredentials.consumer_key, twitterCredentials.consumer_secret)
@@ -99,14 +109,13 @@ def events(frame,put):
 				print("By ", status.user.screen_name, " at ", status.user.created_at)
 				
 	#Get friends from twitter
-	elif link[-3] == "follow" and link[-1] == "twitter":
+	elif link[-1] == "twitter" and link[-3] == "follow":
 		auth = OAuthHandler(twitterCredentials.consumer_key, twitterCredentials.consumer_secret)
 		auth.set_access_token(twitterCredentials.access_token, twitterCredentials.access_secret)
 		api = tweepy.API(auth)
 		for friend in tweepy.Cursor(api.friends).items():
-			print("\nName: ", json.dumps(friend.name), " Username: ", json.dumps(friend.screen_name))
-	
-    	#Screenshot    
+			print("\nName: ", json.dumps(friend.name), " Username: ", json.dumps(friend.screen_name))		
+    #Screenshot    
 	elif put.startswith('take screenshot') or put.startswith("screenshot"):
 		try:
 			pic = pyautogui.screenshot()
