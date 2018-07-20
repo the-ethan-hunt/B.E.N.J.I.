@@ -35,7 +35,7 @@ import numpy as np
 import httplib2
 import os
 from apiclient import discovery
-from oauth2client import client
+from oauth2client import file,client
 from oauth2client import tools
 from oauth2client.file import Storage
 import datetime
@@ -43,6 +43,9 @@ import face_recognition
 import cv2
 import tweepy
 from tweepy import OAuthHandler
+from httplib2 import Http
+import base64
+import re
 import twitterCredentials
 
 requests.packages.urllib3.disable_warnings()
@@ -84,6 +87,94 @@ def events(frame,put):
 		cam.release()
 		cv2.destroyAllWindows()
 	
+	#Fetch your gmails
+	elif put.startswith("fetch unread mails") or put.startswith("fetch unread mail"):
+		try:
+			root = tk.Tk()
+			root.title("Your Unread Gmails ")
+			SCOPES = 'https://www.googleapis.com/auth/gmail.modify' 
+			store = file.Storage('storage.json') 
+			creds = store.get()
+			if not creds or creds.invalid:
+				flow = client.flow_from_clientsecrets('Gmail_API.json', SCOPES)
+				creds = tools.run_flow(flow, store)
+			GMAIL = discovery.build('gmail', 'v1', http=creds.authorize(Http()))
+
+			user_id =  'me'
+			label_id_one = 'INBOX'
+			label_id_two = 'UNREAD' 
+			
+			unread_msgs = GMAIL.users().messages().list(userId='me',labelIds=[label_id_one, label_id_two]).execute()
+
+			mssg_list = []
+			messages = []
+			if 'messages' in unread_msgs:	
+				mssg_list = unread_msgs['messages']
+
+			i=0
+
+			w = tk.Label(root, text="Total unread messages in inbox: " + str(len(mssg_list)))
+			w.grid(row=i, column=1)
+			
+			final_list = []
+			i = i + 1
+			
+			for mssg in mssg_list:
+				temp_dict = { }
+				m_id = mssg['id'] 
+				message = GMAIL.users().messages().get(userId=user_id, id=m_id).execute() 
+				payld = message['payload'] 
+				headr = payld['headers'] 
+
+
+				for three in headr: 
+					if three['name'] == 'From':
+						msg_from = three['value']
+						temp_dict['Sender'] = msg_from 
+					else:
+						pass
+
+				for two in headr: 
+					if two['name'] == 'Date':
+						msg_date = two['value']
+						temp_dict['Date'] = str(msg_date)
+					else:
+						pass
+
+				for one in headr: 
+					if one['name'] == 'subject':
+						msg_subject = one['value']
+						temp_dict['Subject'] = msg_subject
+					else:
+						pass
+				
+				temp_dict['Message_Body'] = message['snippet'] 
+				
+				w = tk.Label(root, text="{")
+				w.grid(row=i, column=1)
+				i = i + 1
+			
+				for key in temp_dict.keys():
+					val = temp_dict[key]
+					w = tk.Label(root, text=key+" : "+ val)
+					w.grid(row=i, column=1)
+					i = i + 1
+					
+				w = tk.Label(root, text="}")
+				w.grid(row=i, column=1)
+				i = i + 1
+				final_list.append(temp_dict) 
+				
+				GMAIL.users().messages().modify(userId=user_id, id=m_id,body={ 'removeLabelIds': ['UNREAD']}).execute() 
+	
+			w = tk.Label(root, text="Total messages retrived: " + str(len(final_list)))
+			w.grid(row=i, column=1)
+			root.geometry("700x500")
+			root.mainloop()
+		
+		except:
+			print("Unable to fetch the mails")
+
 	#Get top 10 tweets
 	elif link[0] == "get" and link[-1] == "tweets":
 		auth = OAuthHandler(twitterCredentials.consumer_key, twitterCredentials.consumer_secret)
