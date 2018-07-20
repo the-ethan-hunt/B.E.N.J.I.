@@ -1,4 +1,5 @@
 apiclient==1.0.3
+base64
 beautifulsoup4==4.6.0
 certifi==2017.11.5
 chardet==3.0.4
@@ -55,7 +56,6 @@ winshell==0.6
 wxPython==4.0.0b2
 XlsxWriter==1.0.2
 youtube-dl==2017.12.10
-
 
 #Forlinux install wxpython using  pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04     wxPython 
 #or
