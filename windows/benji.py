@@ -88,7 +88,7 @@ def events(frame,put):
 		cv2.destroyAllWindows()
 	
 	#Fetch your gmails
-	elif put.startswith("fetch unread mails") or put.startswith("fetch unread mail"):
+	elif put.startswith("get unread mails") or put.startswith("get unread mail"):
 		try:
 			root = tk.Tk()
 			root.title("Your Unread Gmails ")
