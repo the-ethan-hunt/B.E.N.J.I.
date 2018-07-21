@@ -35,7 +35,7 @@ import numpy as np
 import httplib2
 import os
 from apiclient import discovery
-from oauth2client import file,client
+from oauth2client import file, client
 from oauth2client import tools
 from oauth2client.file import Storage
 import datetime
@@ -88,7 +88,7 @@ def events(frame,put):
 		cv2.destroyAllWindows()
 	
 	#Fetch your gmails
-	elif put.startswith("get unread mails") or put.startswith("get unread mail"):
+	elif put.startswith("get unread mail"):
 		try:
 			root = tk.Tk()
 			root.title("Your Unread Gmails ")
@@ -114,7 +114,7 @@ def events(frame,put):
 			i=0
 
 			w = tk.Label(root, text="Total unread messages in inbox: " + str(len(mssg_list)))
-			w.grid(row=i, column=1)
+			w.grid(row=i, column=0)
 			
 			final_list = []
 			i = i + 1
@@ -151,24 +151,24 @@ def events(frame,put):
 				temp_dict['Message_Body'] = message['snippet'] 
 				
 				w = tk.Label(root, text="{")
-				w.grid(row=i, column=1)
+				w.grid(row=i, column=0)
 				i = i + 1
 			
 				for key in temp_dict.keys():
 					val = temp_dict[key]
 					w = tk.Label(root, text=key+" : "+ val)
-					w.grid(row=i, column=1)
+					w.grid(row=i, column=0)
 					i = i + 1
 					
 				w = tk.Label(root, text="}")
-				w.grid(row=i, column=1)
+				w.grid(row=i, column=0)
 				i = i + 1
 				final_list.append(temp_dict) 
 				
 				GMAIL.users().messages().modify(userId=user_id, id=m_id,body={ 'removeLabelIds': ['UNREAD']}).execute() 
 	
 			w = tk.Label(root, text="Total messages retrived: " + str(len(final_list)))
-			w.grid(row=i, column=1)
+			w.grid(row=i, column=0)
 			root.geometry("700x500")
 			root.mainloop()
 		
