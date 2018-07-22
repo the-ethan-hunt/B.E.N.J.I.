@@ -105,26 +105,21 @@ def events(frame,put):
 			label_id_two = 'UNREAD' 
 			
 			unread_msgs = GMAIL.users().messages().list(userId='me',labelIds=[label_id_one, label_id_two]).execute()
-
-			mssg_list = []
-			messages = []
-			if 'messages' in unread_msgs:	
-				mssg_list = unread_msgs['messages']
-
+			mssg_list = unread_msgs.get("messages","")
 			i=0
 
 			w = tk.Label(root, text="Total unread messages in inbox: " + str(len(mssg_list)))
 			w.grid(row=i, column=0)
-			
+
 			final_list = []
 			i = i + 1
-			
+
 			for mssg in mssg_list:
 				temp_dict = { }
-				m_id = mssg['id'] 
+				m_id = mssg.get("id","") 
 				message = GMAIL.users().messages().get(userId=user_id, id=m_id).execute() 
-				payld = message['payload'] 
-				headr = payld['headers'] 
+				payld = message.get("payload","") 
+				headr = payld.get("header","") 
 
 
 				for three in headr: 
