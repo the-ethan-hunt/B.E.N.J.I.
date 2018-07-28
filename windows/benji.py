@@ -68,7 +68,7 @@ def events(frame,put):
 	download_music=("download ","download music ")
 	search_pc= ("find ","lookfor ")
 	graph_generation = ("draw graph for ")
-	history_today = ("history of today ")
+	history_today = ("history of today")
 	close_keywords = ("close ","over ","stop ","exit ")
 	pc_locations = ("desktop", "documents", "downloads")
 	
@@ -451,6 +451,7 @@ def events(frame,put):
 				print("--------------------")
 				print(i)
 				print("--------------------")
+			print("")	
 			print("--------------- END ---------------")
 		
 		except:
