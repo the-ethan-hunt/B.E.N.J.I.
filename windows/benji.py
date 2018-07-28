@@ -428,7 +428,19 @@ def events(frame,put):
 			r = requests.get(url)
 			soup = BeautifulSoup(r.content, 'html.parser')
 			raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('ul')[1].find_all('li')
-			des_raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('p')
+			desc_raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('p')
+
+			hist = []
+			def cleaning(string):
+				cnt = string.find(">")
+				if cnt != -1:
+					cnt_2 = string.find("<")
+					string = string.replace(string[cnt_2 : cnt+1], "")
+					cleaning(string)
+				else:
+					string = string.replace(u'\xa0', u' ')
+					hist.append(string)
+					
 
 	#Box Office Status
 	elif link[-1] == "boxoffice":
