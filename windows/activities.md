@@ -107,6 +107,7 @@ NOTE: All the recorded files will be saved on the desktop. Make sure that the fi
   _draw graph for x**2+4*x+6 from -100 to 100_.
 * "*_city_name_* ***boxoffice***" to get list of Movies from the Cinemas of Town within `Indian Region`.
 * "***add event in google calendar*** to add event on your google calendar, type(or say) in the following format: "add event <event_name> <start date in format yyyy-mm-dd> to <end date in format yyyy-mm-dd>" and it will save the event on your google calendar.
+*"***history of today***" to get details of `Historical Events` occured in the past on the `same Date`. 
 * "***play/stream/queue*** _Song/VideoName_" to play any song or video on Youtube.
 * "***download video*** _SongName_" to download video.
 * "***download music*** _SongName_" to download a song.
