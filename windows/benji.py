@@ -440,6 +440,21 @@ def events(frame,put):
 				else:
 					string = string.replace(u'\xa0', u' ')
 					hist.append(string)
+			
+			cleaning(str(desc_raw[1]))
+			for i in raw:
+				timeline_data = str(i)
+				cleaning(timeline_data)
+
+			for i in hist:
+				print("")
+				print("--------------------")
+				print(i)
+				print("--------------------")
+			print("--------------- END ---------------")
+		
+		except:
+			print("ER")
 					
 
 	#Box Office Status
