@@ -68,7 +68,8 @@ def events(frame,put):
 	download_music=("download ","download music ")
 	search_pc= ("find ","lookfor ")
 	graph_generation = ("draw graph for ")
-	close_keywords=("close ","over ","stop ","exit ")
+	history_today = ("history of today ")
+	close_keywords = ("close ","over ","stop ","exit ")
 	pc_locations = ("desktop", "documents", "downloads")
 	
 	put = put.lower()
@@ -417,6 +418,17 @@ def events(frame,put):
 			print("Error")
 			speak.say("Sorry Graph can not be Plotted")
 			speak.runAndWait()
+
+	#On this Day
+	elif put.startswith(history_today):
+		try:
+			time = datetime.datetime.now() 
+			url = "https://en.wikipedia.org/wiki/" + time.strftime("%B") + "_" + time.strftime("%d")
+
+			r = requests.get(url)
+			soup = BeautifulSoup(r.content, 'html.parser')
+			raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('ul')[1].find_all('li')
+			des_raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('p')
 
 	#Box Office Status
 	elif link[-1] == "boxoffice":
