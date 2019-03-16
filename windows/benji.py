@@ -19,7 +19,7 @@ import urllib
 import datetime
 import ssl
 from bs4 import BeautifulSoup
-import win32com.client as wicl
+'import win32com.client as wicl'
 from urllib.request import urlopen
 import speech_recognition as sr
 import requests
@@ -34,16 +34,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import httplib2
 import os
-from apiclient import discovery
+from apiclient.discovery import build
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 import datetime
-import face_recognition
+#import face_recognition
 import cv2
 import tweepy
 from tweepy import OAuthHandler
-import twitterCredentials
+#import twitterCredentials
 from googletrans import Translator
 from langdetect import detect
 import threading
@@ -143,7 +143,7 @@ def events(frame,put):
 		r = requests.get(goog_search)
 		soup = BeautifulSoup(r.text, "html.parser")
 		webbrowser.open(soup.find('cite').text)
-
+		'''
 	#Get top 10 tweets
 	elif link[0] == "get" and link[-1] == "tweets":
 		auth = OAuthHandler(twitterCredentials.consumer_key, twitterCredentials.consumer_secret)
@@ -166,8 +166,9 @@ def events(frame,put):
 			api = tweepy.API(auth)
 			for friend in tweepy.Cursor(api.friends).items():
 				print("\nName: ", json.dumps(friend.name), " Username: ", json.dumps(friend.screen_name))
-		
+			'''		
     	#Screenshot    
+	
 	elif put.startswith('take screenshot') or put.startswith("screenshot"):
 		try:
 			pic = pyautogui.screenshot()
@@ -878,7 +879,7 @@ class MyFrame(tk.Frame):
 		speak.say('''Hi Agent! BENJI at your service''')
 		speak.runAndWait()
 
-		self.photo1 = tk.PhotoImage(file="mic_icon.png")
+		self.photo1 = tk.PhotoImage(file="E:/Open Source/B.E.N.J.I.-master/B.E.N.J.I.-master/windows/mic_icon.png")
 
 		self.btn = ttk.Button(root,command=self.OnClicked,
 		image=self.photo1, style="C.TButton")
@@ -942,12 +943,13 @@ if __name__=="__main__":
 	path = 'C:/'
 	lisdir = os.listdir(path)
 	flag = 0
+	'''
 	for lis in lisdir:
 		# if users face is in dataset, then the following code will run for authentication
 		if lis == 'dataset':
 			face_recognition.main()
 			flag = 1
-
+	
 	if flag != 1:		
 		os.mkdir('C:/dataset')
 		name = "admin"
@@ -957,7 +959,7 @@ if __name__=="__main__":
 		cv2.imwrite(path + "/" + str(name) + ".jpg", img)
 		cam.release()
 		cv2.destroyAllWindows()
-
+	'''
 	#GUI    
 	root = tk.Tk()
 	view = MyFrame(root)
