@@ -95,7 +95,8 @@ def events(frame,put):
 	download_music=("download ","download music ")
 	search_pc= ("find ","lookfor ")
 	graph_generation = ("draw graph for ")
-	close_keywords=("close ","over ","stop ","exit ")
+	history_today = ("history of today")
+	close_keywords = ("close ","over ","stop ","exit ")
 	pc_locations = ("desktop", "documents", "downloads")
 	
 	put = put.lower()
@@ -481,6 +482,45 @@ def events(frame,put):
 			print("Error")
 			speak.say("Sorry Graph can not be Plotted")
 			speak.runAndWait()
+
+	#On this Day
+	elif put.startswith(history_today):
+		try:
+			time = datetime.datetime.now() 
+			url = "https://en.wikipedia.org/wiki/" + time.strftime("%B") + "_" + time.strftime("%d")
+
+			r = requests.get(url)
+			soup = BeautifulSoup(r.content, 'html.parser')
+			raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('ul')[1].find_all('li')
+			desc_raw = soup.find_all('div', attrs={'class': 'mw-parser-output'})[0].find_all('p')
+
+			hist = []
+			def cleaning(string):
+				cnt = string.find(">")
+				if cnt != -1:
+					cnt_2 = string.find("<")
+					string = string.replace(string[cnt_2 : cnt+1], "")
+					cleaning(string)
+				else:
+					string = string.replace(u'\xa0', u' ')
+					hist.append(string)
+			
+			cleaning(str(desc_raw[1]))
+			for i in raw:
+				timeline_data = str(i)
+				cleaning(timeline_data)
+
+			for i in hist:
+				print("")
+				print("--------------------")
+				print(i)
+				print("--------------------")
+			print("")	
+			print("--------------- END ---------------")
+		
+		except:
+			print("ER")
+					
 
 	#Box Office Status
 	elif link[-1] == "boxoffice":
