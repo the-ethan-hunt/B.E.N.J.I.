@@ -49,8 +49,14 @@ from langdetect import detect
 import threading
 from win10toast import ToastNotifier
 
+import lyrics
+import screenshot
+import google_translator
+import add_face
+import upcoming_events_google
+
 #requests.packages.urllib3.disable_warnings()
-#try:
+#try:5
 #		_create_unverified_https_context=ssl._create_unverified_context
 #except 'AttributeError':
 #		pass
@@ -59,15 +65,15 @@ from win10toast import ToastNotifier
 
 #headers = {'''user-agent':'Chrome/53.0.2785.143'''}
 #speak=wicl.Dispatch("SAPI.SpVoice")
-speak = pyttsx3.init()
+speak = pyttsx3.init()				# Offline python library for Converting Text to Speech
 
 #Function providing feature for maintaining good eye-sight.
 #Provides notification to look 20 feet away for 20 seconds every 20 minutes.
 def run():
-	toaster = ToastNotifier()
-	time_seconds = 60
+	toaster = ToastNotifier()				# Windows 10 Toast notifications for GUI development
+	time_seconds = 60								# Time to display the notification for
 	while True:
-		time.sleep(time_seconds-5)
+		time.sleep(time_seconds-5)		
 		speak.say("Please look 20 feet away for 20 seconds")
 		speak.runAndWait()
 		#Takes 5 seconds to execute
@@ -80,7 +86,7 @@ def run():
 		speak.say("Please carry your work!")
 		speak.runAndWait()
 
-def events(frame,put):
+def events(frame,put): 	# To determine the events 
 	identity_keywords = ["who are you", "who r u", "what is your name"]
 	youtube_keywords = ("play ", "stream ", "queue ")
 	launch_keywords = ["open ", "launch "]
@@ -97,52 +103,17 @@ def events(frame,put):
 	put = put.lower()
 	link = put.split()
 	
-	#translate
+	# Translate the sentence into given language 
 	if link[0] == "translate" and link[-2] == "to":
-		translator = Translator()
-		pystring = " ".join(link[1:-2])
-		lang = detect(pystring)
-		if link[-1] == "english":
-			id = "en"
-		elif link[-1] == "spanish":
-			id = "es"
-		elif link[-1] == "french":
-			id = "fr"
-		elif link[-1] == "german":
-			id = "de"
-		elif link[-1] == "italian":
-			id = "it"
-		elif link[-1] == "portugese" or link[-1] == "portuguese":
-			id = "pt"
-		else:
-			id = "en"
-		translated = translator.translate(pystring, src=lang, dest=id)
-		print(translated.text)
-		try:
-			speak.say("The translated text is "+translated.text)
-			speak.runAndWait()
-		except:
-			print("Error speaking, here is the translated text: {}".format(translated.text))
+		google_translator.google_translate(link)		# google_translate(link) function in google_translator.py
 			
 	#Add user for face detection
-	elif link[0] == "face" or link[0] == "phase":
-		name = link[1]
-		path = 'C:/dataset' 
-		cam = cv2.VideoCapture(0)
-		ret, img = cam.read()
-		cv2.imwrite(path + "/" + str(name) + ".jpg", img)
-		cam.release()
-		cv2.destroyAllWindows()
+	elif link[0] == "face" or link[0] == "phase":		# Adding user for face detection
+		add_face.add_face_detect(link)				# add_face_detect(link) function in add_face.py
 	
 	#Get lyrics
 	elif link[0] == "lyrics":
-		link = '+'.join(link[1:])
-		link = link.replace('+',' ')
-		title = link[1:]
-		goog_search = "https://www.google.com/search?q=" + title + "+lyrics"
-		r = requests.get(goog_search)
-		soup = BeautifulSoup(r.text, "html.parser")
-		webbrowser.open(soup.find('cite').text)
+		lyrics.lyric(link)			# lyric(link) function in lyrics.py
 		'''
 	#Get top 10 tweets
 	elif link[0] == "get" and link[-1] == "tweets":
@@ -167,56 +138,16 @@ def events(frame,put):
 			for friend in tweepy.Cursor(api.friends).items():
 				print("\nName: ", json.dumps(friend.name), " Username: ", json.dumps(friend.screen_name))
 			'''		
-    	#Screenshot    
+    
+			    
 	
-	elif put.startswith('take screenshot') or put.startswith("screenshot"):
-		try:
-			pic = pyautogui.screenshot()
-			spath = os.path.expanduser('~') + '/Desktop/screenshot.jpg'
-			pic.save(spath)
-		except:
-			print("Unable to take screenshot.")
+	elif put.startswith('take screenshot') or put.startswith("screenshot"):		# To take screenshot
+		screenshot.screenshot_win()			# screenshot_win() function in screenshot.py
+		
 
 	#Upcoming events
 	elif put.startswith("upcoming events") or put.startswith("coming events") or put.startswith("events"):
-		try:
-			SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-			store = file.Storage('credentials.json')
-			creds = store.get()
-			if not creds or creds.invalid:
-				flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-				creds = tools.run_flow(flow, store)
-			service = build('calendar', 'v3', http=creds.authorize(Http()))
-				
-			now = datetime.datetime.utcnow().isoformat() + 'z' # 'Z' indicates UTC time
-			root = tk.Tk()
-			root.title("Top 10 Upcoming Events")
-
-			events_result = service.events().list(calendarId='primary', timeMin=now,maxResults=10, singleEvents=True,orderBy='startTime').execute()
-			events = events_result.get('items', [])
-
-			if not events:
-				w = tk.Label(root, text="No upcoming events found.")
-				w.pack()
-				
-			w = tk.Label(root, text="Event Title")
-			w.grid(row=0, column=1)
-			w = tk.Label(root, text="Time And Date Of Event")
-			w.grid(row=0, column=2)
-
-			i=1
-			for event in events:
-				start = event['start'].get('dateTime', event['start'].get('date'))
-				w = tk.Label(root, text=event['summary'])
-				w.grid(row=i, column=1)
-				w = tk.Label(root, text=start)
-				w.grid(row=i, column=2)
-				i=i+1
-				
-			root.geometry("400x400")
-			root.mainloop()
-		except:
-			print("Unable to take upcoming events")
+		upcoming_events_google.upcoming_events()		#upcoming_events() function in upcoming_events_google.py
 
 	#Add note
 	elif put.startswith("note") or put.startswith("not") or put.startswith("node"):
@@ -239,6 +170,7 @@ def events(frame,put):
 			speak.runAndWait()
 		except:
 			print("Could not add the specified note!")
+
 			
 	#adding an event in google calendar
 	elif link[0] == "add" and link[1]=="event":
@@ -860,6 +792,8 @@ class StdRedirector(object):
 
 	def write(self, output):
 		self.text_window.insert(tk.END, output)
+
+		
 # Creating the graphical user interface
 class MyFrame(tk.Frame):
 	def __init__(self,*args,**kwargs):
