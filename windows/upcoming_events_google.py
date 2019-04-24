@@ -20,7 +20,9 @@ def upcoming_events():
             
             if not events:
                 w = tk.Label(root, text="No upcoming events found.")
-                w.pack()w = tk.Label(root, text="Event Title")
+                w.pack()
+		
+	    w = tk.Label(root, text="Event Title")	
             w.grid(row=0, column=1)
             w = tk.Label(root, text="Time And Date Of Event")
             w.grid(row=0, column=2)
