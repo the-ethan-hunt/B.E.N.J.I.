@@ -47,7 +47,7 @@ Maintainers : [Dhruv Apte](https://github.com/the-ethan-hunt), [Abhimanyu Thakre
 [(Back to top)](#list-of-contents)
 
 You can install B.E.N.J.I. on your laptop by cloning this repository as of first:
-1. `git clone http://github.com/the-ethan-hunt/B.E.N.J.I`
+1. `git clone http://github.com/the-ethan-hunt/B.E.N.J.I.`
 2. Open your `IPython notebook` to `%run benji.py`. For `Command Prompt` try `python benji.py`. <br><br>
 Note:If a module is not found, then install each module by: pip install modulename<br>
 P.S. B.E.N.J.I. now works for Windows, Linux and Mac OS :tada:
