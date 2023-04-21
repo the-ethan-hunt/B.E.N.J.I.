@@ -17,7 +17,7 @@ setup(
 	description='Your Voice Assistant',
 
 
-	author:'Dhruv Apte',
+	author='Dhruv Apte',
 	author_git="https://github.com/the-ethan-hunt/",
 	author_website="https://the-ethan-hunt.github.io/",
 	author_email='dhruvgirishapte@gmail.com',
